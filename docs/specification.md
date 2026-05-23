@@ -9,7 +9,7 @@ Generate a synthetic dataset simulating the continuous arrival of orders. Each o
 ### 2. Scoring Function (Piecewise)
 The Max-Heap must sort the orders by always extracting the maximum value. To handle the `dispatchWindow` mathematically without hitting zero, implement the following piecewise function to calculate the `dynamicScore`:
 - For orders where `dispatchWindow > 0`: `dynamicScore = (W1 * priorityScore) + (W2 * dispatchWindow) + sizeBonus`.
-- For orders where `dispatchWindow < 0`: `dynamicScore = (W1 * priorityScore) + sizeBonus + (W2 * (-dispatchWindow))`.
+- For orders where `dispatchWindow < 0`: `dynamicScore = (W1 * priorityScore) + sizeBonus + (W3 * (-dispatchWindow))`.
 
 ### 3. Update and Re-queuing Mechanics
 The simulation model must handle the passage of time by applying these rules:
@@ -26,7 +26,7 @@ During the dispatch cycle, extract orders and track the following performance me
 
 ### 5. AI Objective
 Build an optimization function (e.g., using Random Search or Grid Search) that evaluates the simulation iteratively. 
-Find the best combination of weights (`W1`, `W2`) and bonus values (`n` and `m`) that achieves the following:
+Find the best combination of weights (`W1`, `W2`, `W3`) and bonus values (`n` and `m`) that achieves the following:
 1. Minimize expired orders and delay time.
 2. Maximize throughput and prioritize the dispatch of high `priorityScore` orders.
 
@@ -36,11 +36,11 @@ Please return the complete Python script. Make sure to include comments explaini
 
 **What was built:** A Jupyter notebook (`model.ipynb`) implementing the full dispatch optimization pipeline across 10 cells.
 
-**Architecture:** `Order` dataclass holds priority, window, and size category. `ScoringEngine` computes the piecewise `dynamicScore`. `DoubleBufferHeap` wraps two heaps with an atomic active/shadow swap for concurrency-safe rebuilds. A minute-by-minute simulation engine drives dispatch, tracks metrics (`compute_metrics`), and a grid search optimizer sweeps W₁ × W₂ × n × m to find the best composite score.
+**Architecture:** `Order` dataclass holds priority, window, and size category. `ScoringEngine` computes the piecewise `dynamicScore`. `DoubleBufferHeap` wraps two heaps with an atomic active/shadow swap for concurrency-safe rebuilds. A minute-by-minute simulation engine drives dispatch, tracks metrics (`compute_metrics`), and a grid search optimizer sweeps W₁ × W₂ × W₃ × n × m to find the best composite score.
 
-**Key design decisions:** `dispatchWindow` is always positive at insert and forced to −1 at the zero crossing (per spec). A single W₂ governs both piecewise branches, creating a U-shaped trade-off curve that the grid search naturally navigates. Heaps rebuild every 2–3 minutes; dispatch capacity is configurable via the `CONFIG` dict.
+**Key design decisions:** `dispatchWindow` is always positive at insert and forced to −1 at the zero crossing (per spec). Separate W₂ and W₃ govern each piecewise branch independently. Heaps rebuild every 2–3 minutes; dispatch capacity is configurable via the `CONFIG` dict.
 
-**Current results** (seed 42): Best parameters are W₁ = 5.0, W₂ = 0.1, n = 20, m = 7. Against 800 orders over 480 minutes with 2 dispatches/min: 6 expired, 13.83 min average delay, 1.67 orders/min throughput, 48.23 average priority dispatched, composite score −103.11.
+**Current results** (seed 42): Best parameters are W₁ = 5.0, W₂ = 0.1, W₃ = 0.1, n = 20, m = 7. Against 800 orders over 480 minutes with 2 dispatches/min: 6 expired, 13.83 min average delay, 1.67 orders/min throughput, 48.23 average priority dispatched, composite score −103.11.
 
 **How to use:** Tune `CONFIG` in Cell 1 (`N_ORDERS`, `SIMULATION_DURATION`, `DISPATCH_CAPACITY`, grid ranges, seed). Run all cells; the best model and metrics appear in Cell 8.
 
