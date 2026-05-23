@@ -8,7 +8,7 @@ Generate a synthetic dataset simulating the continuous arrival of orders. Each o
 
 ### 2. Scoring Function (Piecewise)
 The Max-Heap must sort the orders by always extracting the maximum value. To handle the `dispatchWindow` mathematically without hitting zero, implement the following piecewise function to calculate the `dynamicScore`:
-- For orders where `dispatchWindow > 0`: `dynamicScore = (W1 * priorityScore) + (W2 * dispatchWindow) + sizeBonus`.
+- For orders where `dispatchWindow > 0`: `dynamicScore = (W1 * priorityScore) + (W2 * (1 / dispatchWindow)) + sizeBonus`.
 - For orders where `dispatchWindow < 0`: `dynamicScore = (W1 * priorityScore) + sizeBonus + (W3 * (-dispatchWindow))`.
 
 ### 3. Update and Re-queuing Mechanics

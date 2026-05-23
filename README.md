@@ -1,7 +1,11 @@
 # VelozMart: Optimización de órdenes
 
 > [!WARNING]
-> Este texto es una transcripción del documento [velozMart.pdf](https://github.com/rifusaki/velozMart/blob/825109fdc6dd9d16c021674f2182f2d5a945c442/docs/VelozMart.pdf) agregado en el commit [825109f](https://github.com/rifusaki/velozMart/commit/825109fdc6dd9d16c021674f2182f2d5a945c442) a las 23:59.
+> Este documento fue **modificado** a partir de [velozMart.pdf](https://github.com/rifusaki/velozMart/blob/825109fdc6dd9d16c021674f2182f2d5a945c442/docs/VelozMart.pdf) agregado en el commit [825109f](https://github.com/rifusaki/velozMart/commit/825109fdc6dd9d16c021674f2182f2d5a945c442) a las 23:59.
+>
+> El cambio consiste en corregir un error en el pseudocódigo: en vez de utilizar $W_2 \frac{1}{\text{dispatchWindow}}$, como indica la fórmula definida en la sección 2, se estaba utilizando $W_2 \cdot \text{dispatchWindow}$. Este error afectó a `docs/specification.md`, el cual fue utilizado como prompt para crear `src/model.ipynb`. Identificamos este error una vez habíamos realizado la entrega.
+>
+> Por transparencia, estos cambios fueron subidos a la branch `fix/pseudocode-score-inversion` dejando en `main` el documento entregado originalmente dentro de los plazos establecidos.
 
 ## 1. Presentación del problema
 
