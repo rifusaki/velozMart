@@ -49,7 +49,7 @@ Presentamos un pseudocódigo básico de implementación:
 ```
 FUNCTION CalculateScore(order):
     IF order.dispatchWindow > 0:
-        RETURN (W1 * order.priorityScore) + (W2 * order.dispatchWindow) + order.sizeBonus
+        RETURN (W1 * order.priorityScore) + (W2 * (1/order.dispatchWindow)) + order.sizeBonus
     ELSE:
         RETURN (W1 * order.priorityScore) + order.sizeBonus + (W3 * ABS(order.dispatchWindow))
     LogExpired(order.id, CurrentTime())
