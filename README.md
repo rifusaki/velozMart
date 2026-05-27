@@ -29,7 +29,7 @@ Dado que sólo necesitamos leer un dato a la vez, se eligió un Max Heap como m�
 $$
 \text{score} =
 \begin{cases}
-W_1 \cdot \text{priorityScore} + W_2 \cdot \dfrac{1}{\text{dispatchWindow}} + \text{sizeBonus} & \text{si } \text{dispatchWindow} > 0 \\[10pt]
+W_1 \cdot \text{priorityScore} + W_2 \cdot \dfrac{1}{\text{dispatchWindow}} + \text{sizeBonus} & \text{si } \text{dispatchWindow} > 0 \\
 W_1 \cdot \text{priorityScore} + \text{sizeBonus} + W_3 \cdot (-\text{dispatchWindow}) & \text{si } \text{dispatchWindow} < 0
 \end{cases}
 $$
